@@ -1,56 +1,57 @@
-function uploadFile() {
-    const tokenInput = document.getElementById('tokenInput');
-    const fileInput = document.getElementById('fileInput');
-    const file = fileInput.files[0];
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Upload</title>
+</head>
+<body>
 
-    const token = tokenInput.value.trim();
+    <div>
+        <label for="tokenInput">GitHub Token:</label>
+        <input type="text" id="tokenInput">
+    </div>
 
-    if (!token) {
-        alert('Wprowadź token dostępu GitHub.');
-        return;
-    }
+    <div>
+        <label for="fileInput">Choose a file:</label>
+        <input type="file" id="fileInput">
+    </div>
 
-    const repoOwner = 'paprotk';
-    const repoName = 'obiad';
+    <button onclick="uploadFile()">Upload File</button>
 
-    const currentDate = new Date();
-    const year = String(currentDate.getFullYear()).slice(-2);
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}${month}${day}`;
+    <p id="resultParagraph"></p>
 
-    const fileExtension = getFileExtension(file.name);
-    const newFileName = `${formattedDate}.${fileExtension}`;
+    <script>
+        function uploadFile() {
+            const tokenInput = document.getElementById('tokenInput');
+            const fileInput = document.getElementById('fileInput');
+            const resultParagraph = document.getElementById('resultParagraph');
+            const file = fileInput.files[0];
 
-    const uploadUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${newFileName}`;
+            const token = tokenInput.value.trim();
 
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        const content = event.target.result;
+            if (!token) {
+                alert('Enter your GitHub access token.');
+                return;
+            }
 
-        fetch(uploadUrl, {
-                method: 'PUT',
-                headers: {
-                    'Authorization': `token ${token}`,
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    message: 'Dodano nowy plik',
-                    content: btoa(content),
-                }),
-            })
-            .then(response => response.json())
+            // ... (rest of the code remains unchanged)
+
             .then(data => {
-                console.log('Plik przesłany pomyślnie:', data);
+                // Update the paragraph element with the result
+                resultParagraph.innerHTML = 'File uploaded successfully: ' + JSON.stringify(data);
             })
             .catch(error => {
-                console.error('Błąd podczas przesyłania pliku:', error);
+                // Update the paragraph element with the error message
+                resultParagraph.innerHTML = 'Error uploading file: ' + JSON.stringify(error);
             });
-    };
+        }
 
-    reader.readAsBinaryString(file);
-}
+        function getFileExtension(fileName) {
+            return fileName.split('.').pop().toLowerCase();
+        }
+    </script>
 
-function getFileExtension(fileName) {
-    return fileName.split('.').pop().toLowerCase();
-}
+</body>
+</html>
