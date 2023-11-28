@@ -32,4 +32,4 @@ git add .
 git commit -m "Aktualizacja pliku $new_name i przeniesienie do archiwum"
 
 # Wypchnij zmiany na GitHub
-git push origin master
+git push origin main
