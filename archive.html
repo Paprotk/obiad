@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Archiwum</title>
+  <style>
+    .image-container {
+      text-align: center;
+    }
+
+    .image-container img {
+      width: 100%;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .toggle-arrow {
+      cursor: pointer;
+    }
+
+    #fileList span {
+      color: black;
+      cursor: pointer;
+      text-decoration: none;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Archiwum</h1>
+  <ul id="fileList"></ul>
+
+  <script>
+    const username = 'paprotk';
+    const repo = 'obiad';
+    const folderPath = 'archiwum'; // Ścieżka do folderu w repozytorium
+
+    const fileListElement = document.getElementById('fileList');
+
+    fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`)
+      .then(response => response.json())
+      .then(data => {
+        // Sort the data array in descending order by name
+        data.sort((a, b) => b.name.localeCompare(a.name));
+
+        data.forEach(file => {
+          const fileLink = document.createElement('span'); // Change from 'a' to 'span'
+          fileLink.textContent = formatFileName(file.name);
+          fileLink.classList.add('toggle-arrow'); // Add the same class as the arrow
+
+          fileLink.addEventListener('click', function (event) {
+            toggleImage(event, file.download_url);
+          });
+
+          const listItem = document.createElement('li');
+          listItem.appendChild(fileLink);
+
+          const toggleArrow = document.createElement('span');
+          toggleArrow.innerHTML = ''; // Down arrow character
+          toggleArrow.classList.add('toggle-arrow');
+          toggleArrow.addEventListener('click', function (event) {
+            toggleImage(event, file.download_url);
+          });
+
+          listItem.appendChild(toggleArrow);
+
+          const imageContainer = document.createElement('div');
+          imageContainer.classList.add('image-container');
+          imageContainer.setAttribute('data-visible', 'false');
+          listItem.appendChild(imageContainer);
+
+          fileListElement.appendChild(listItem);
+        });
+      })
+      .catch(error => console.error('Error:', error));
+
+    function toggleImage(event, imageUrl) {
+      const listItem = event.currentTarget.parentNode;
+      const imageContainer = listItem.querySelector('.image-container');
+
+      const isVisible = imageContainer.getAttribute('data-visible') === 'true';
+
+      if (!isVisible) {
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        image.alt = 'Image';
+
+        imageContainer.innerHTML = '';
+        imageContainer.appendChild(image);
+        imageContainer.setAttribute('data-visible', 'true');
+      } else {
+        imageContainer.innerHTML = '';
+        imageContainer.setAttribute('data-visible', 'false');
+      }
+    }
+
+    function formatFileName(fileName) {
+      // Assumption: The file name has a format like "yymmdd.png"
+      const year = "20" + fileName.slice(0, 2) + '↓' ; // Assuming the year is in the 21st century
+      const month = fileName.slice(2, 4);
+      const day = fileName.slice(4, 6);
+
+      const formattedDate = `${day} ${getMonthName(month)} ${year}`;
+      return formattedDate;
+    }
+
+    function getMonthName(month) {
+      const months = [
+        "stycznia", "lutego", "marca",
+        "kwietnia", "maja", "czerwca",
+        "lipca", "sierpnia", "września",
+        "października", "listopada", "grudnia"
+      ];
+
+      return months[parseInt(month, 10) - 1];
+    }
+  </script>
+</body>
+
+</html>
