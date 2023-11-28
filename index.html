@@ -20,7 +20,24 @@
     <title>Obiad</title>
 </head>
 <body>
-    <img src="https://raw.githubusercontent.com/paprotk/obiad/main/1.png">
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the list of files with .png or .jpg extension
+            fetch('https://api.github.com/repos/paprotk/obiad/contents/')
+                .then(response => response.json())
+                .then(data => {
+                    // Find the first file with .png or .jpg extension
+                    const imageFile = data.find(file => file.name.match(/\.(png|jpg)$/i));
+                    
+                    if (imageFile) {
+                        // Set the image source to the found file
+                        document.querySelector('img').src = imageFile.download_url;
+                    }
+                })
+                .catch(error => console.error('Error fetching image:', error));
+        });
+    </script>
+    <img src="">
     <p>obiadtk siempre vivo</p>
     <p><a href="archive.html">archiwum</a></p>
 </body>
