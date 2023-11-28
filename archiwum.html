@@ -34,30 +34,12 @@
 
     const fileListElement = document.getElementById('fileList');
 
-    function toggleImage(event, imageUrl) {
-      const listItem = event.currentTarget.parentNode;
-      const imageContainer = listItem.querySelector('.image-container');
-
-      // Toggle the visibility based on the 'data-visible' attribute
-      const isVisible = imageContainer.getAttribute('data-visible') === 'true';
-
-      if (!isVisible) {
-        const image = document.createElement('img');
-        image.src = imageUrl;
-        image.alt = 'Image';
-
-        imageContainer.innerHTML = '';
-        imageContainer.appendChild(image);
-        imageContainer.setAttribute('data-visible', 'true');
-      } else {
-        imageContainer.innerHTML = '';
-        imageContainer.setAttribute('data-visible', 'false');
-      }
-    }
-
     fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`)
       .then(response => response.json())
       .then(data => {
+        // Sort the data array in descending order by name
+        data.sort((a, b) => b.name.localeCompare(a.name));
+
         data.forEach(file => {
           const fileLink = document.createElement('a');
           fileLink.href = file.html_url;
@@ -83,6 +65,26 @@
         });
       })
       .catch(error => console.error('Error:', error));
+
+    function toggleImage(event, imageUrl) {
+      const listItem = event.currentTarget.parentNode;
+      const imageContainer = listItem.querySelector('.image-container');
+
+      const isVisible = imageContainer.getAttribute('data-visible') === 'true';
+
+      if (!isVisible) {
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        image.alt = 'Image';
+
+        imageContainer.innerHTML = '';
+        imageContainer.appendChild(image);
+        imageContainer.setAttribute('data-visible', 'true');
+      } else {
+        imageContainer.innerHTML = '';
+        imageContainer.setAttribute('data-visible', 'false');
+      }
+    }
   </script>
 </body>
 
