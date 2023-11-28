@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Katalog archiwum
+archive_dir=/home/arek/Desktop/obiad/archive
+
+# Sprawdź, czy istnieje katalog archiwum, jeśli nie, utwórz go
+if [ ! -d "$archive_dir" ]; then
+    mkdir "$archive_dir"
+fi
+
 # Znajdź pliki z rozszerzeniem .png i .jpg
 for file in *.png *.jpg; do
     if [ -f "$file" ]; then
@@ -14,8 +22,14 @@ for file in *.png *.jpg; do
             # Stwórz nową nazwę pliku z oryginalnym rozszerzeniem na końcu
             new_name="${now}.${extension}"
             
-            mv "$file" "$new_name"
-            echo "Zmieniono nazwę pliku $file na: $new_name"
+            # Jeśli data w nazwie pliku nie jest dzisiejsza, przenieś do archiwum
+            if [ ! "$now" == "$(date +"%y%m%d" -d "@$(stat -c %Y "$file")")" ]; then
+                mv "$file" "$archive_dir/$file"
+                echo "Plik $file przeniesiony do archiwum."
+            else
+                mv "$file" "$new_name"
+                echo "Zmieniono nazwę pliku $file na: $new_name"
+            fi
         else
             echo "Plik $file już zawiera datę w nazwie. Nie zmieniam nazwy."
         fi
@@ -23,7 +37,7 @@ for file in *.png *.jpg; do
 done
 
 # Przejście do katalogu repozytorium Git
-cd ~/Desktop/obiad
+cd /home/arek/Desktop/obiad
 
 # Dodaj wszystkie zmiany
 git add .
