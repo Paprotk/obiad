@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Archiwum</title>
   <style>
     .image-container {
-      display: none;
       text-align: center;
     }
 
@@ -22,6 +22,7 @@
     }
   </style>
 </head>
+
 <body>
   <h1>Archiwum</h1>
   <ul id="fileList"></ul>
@@ -37,16 +38,20 @@
       const listItem = event.currentTarget.parentNode;
       const imageContainer = listItem.querySelector('.image-container');
 
-      if (imageContainer.style.display === 'none') {
+      // Toggle the visibility based on the 'data-visible' attribute
+      const isVisible = imageContainer.getAttribute('data-visible') === 'true';
+
+      if (!isVisible) {
         const image = document.createElement('img');
         image.src = imageUrl;
         image.alt = 'Image';
 
         imageContainer.innerHTML = '';
         imageContainer.appendChild(image);
-        imageContainer.style.display = 'block';
+        imageContainer.setAttribute('data-visible', 'true');
       } else {
-        imageContainer.style.display = 'none';
+        imageContainer.innerHTML = '';
+        imageContainer.setAttribute('data-visible', 'false');
       }
     }
 
@@ -61,7 +66,9 @@
           const toggleArrow = document.createElement('span');
           toggleArrow.innerHTML = '&#x2193;'; // Down arrow character
           toggleArrow.classList.add('toggle-arrow');
-          toggleArrow.addEventListener('click', (event) => toggleImage(event, file.download_url));
+          toggleArrow.addEventListener('click', function (event) {
+            toggleImage(event, file.download_url);
+          });
 
           const listItem = document.createElement('li');
           listItem.appendChild(fileLink);
@@ -69,6 +76,7 @@
 
           const imageContainer = document.createElement('div');
           imageContainer.classList.add('image-container');
+          imageContainer.setAttribute('data-visible', 'false');
           listItem.appendChild(imageContainer);
 
           fileListElement.appendChild(listItem);
@@ -77,4 +85,5 @@
       .catch(error => console.error('Error:', error));
   </script>
 </body>
+
 </html>
