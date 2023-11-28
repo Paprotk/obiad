@@ -43,7 +43,7 @@
         data.forEach(file => {
           const fileLink = document.createElement('a');
           fileLink.href = file.html_url;
-          fileLink.textContent = file.name;
+          fileLink.textContent = formatFileName(file.name);
 
           const toggleArrow = document.createElement('span');
           toggleArrow.innerHTML = '&#x2193;'; // Down arrow character
@@ -84,6 +84,27 @@
         imageContainer.innerHTML = '';
         imageContainer.setAttribute('data-visible', 'false');
       }
+    }
+
+    function formatFileName(fileName) {
+      // Assumption: The file name has a format like "yymmdd.png"
+      const year = "20" + fileName.slice(0, 2); // Assuming the year is in the 21st century
+      const month = fileName.slice(2, 4);
+      const day = fileName.slice(4, 6);
+
+      const formattedDate = `${day} ${getMonthName(month)} ${year}`;
+      return formattedDate;
+    }
+
+    function getMonthName(month) {
+      const months = [
+        "stycznia", "lutego", "marca",
+        "kwietnia", "maja", "czerwca",
+        "lipca", "sierpnia", "września",
+        "października", "listopada", "grudnia"
+      ];
+
+      return months[parseInt(month, 10) - 1];
     }
   </script>
 </body>
