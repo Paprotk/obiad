@@ -22,22 +22,6 @@ for file in *.png *.jpg; do
     fi
 done
 
-# Zmienna do śledzenia czy znaleziono pliki do przeniesienia
-found_files=false
-
-# Przenieś pliki .png i .jpg, które nie mają dzisiejszej daty w nazwie, do folderu archiwum
-for file in *.png *.jpg; do
-    if [ -f "$file" ]; then
-        # Sprawdź, czy nazwa pliku nie zawiera dzisiejszej daty
-        if ! [[ "$file" == *"$now"* ]]; then
-            mv "$file" "$archiwum_folder/"
-            echo "Przeniesiono plik $file do folderu archiwum."
-            found_files=true
-        fi
-    fi
-done
-
-
 # Przejście do katalogu repozytorium Git
 cd ~/Desktop/obiad
 
