@@ -1,0 +1,12 @@
+# Przejście do katalogu repozytorium Git
+cd ~/Desktop/obiad
+
+# Dodaj wszystkie zmiany
+git add .
+
+# Utwórz commit z wiadomością
+git commit -m "Zmieniono nazwę pliku $file na: $new_name"
+
+# Wypchnij zmiany na GitHub
+git push origin main
+
