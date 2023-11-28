@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Archiwum</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>archiwum</title>
 </head>
 <body>
-  <h1>Archiwum</h1>
-  <ul id="fileList"></ul>
-
-  <script>
-    const username = 'your_username';
-    const repo = 'your_repository';
-    const folderPath = 'path/to/your/folder'; // Ścieżka do folderu w repozytorium
-
-    const fileListElement = document.getElementById('fileList');
-
-    fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`)
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(file => {
-          const fileLink = document.createElement('a');
-          fileLink.href = file.html_url;
-          fileLink.textContent = file.name;
-
-          const listItem = document.createElement('li');
-          listItem.appendChild(fileLink);
-
-          fileListElement.appendChild(listItem);
-        });
-      })
-      .catch(error => console.error('Error:', error));
-  </script>
+    kiedyś bedzie
 </body>
 </html>
