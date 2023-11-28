@@ -1,4 +1,4 @@
-function moveFirstImageToArchive() {
+function moveFirstPNGToArchive() {
     const tokenInput = document.getElementById('tokenInput');
     const token = tokenInput.value.trim();
     const repoOwner = 'paprotk';
@@ -26,14 +26,14 @@ function moveFirstImageToArchive() {
             return;
         }
 
-        const firstImage = files.find(file => file.type === 'file' && (file.name.toLowerCase().endsWith('.png') || file.name.toLowerCase().endsWith('.jpg')));
+        const firstPNG = files.find(file => file.type === 'file' && file.name.toLowerCase().endsWith('.png'));
 
-        if (!firstImage) {
-            alert('Brak plików PNG lub JPG do przeniesienia.');
+        if (!firstPNG) {
+            alert('Brak plików PNG do przeniesienia.');
             return;
         }
 
-        const fileName = firstImage.name;
+        const fileName = firstPNG.name;
         const mainFolderFilePath = mainFolder ? `${mainFolder}/${fileName}` : fileName;
         const mainFolderFileUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${mainFolderFilePath}`;
         const moveUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${archiveFolder}/${fileName}`;
@@ -74,7 +74,7 @@ function moveFirstImageToArchive() {
                     },
                     body: JSON.stringify({
                         message: 'Usunięto plik z głównego folderu',
-                        sha: firstImage.sha, // Include the SHA of the file for verification
+                        sha: firstPNG.sha, // Include the SHA of the file for verification
                     }),
                 })
                 .then(response => response.json())
