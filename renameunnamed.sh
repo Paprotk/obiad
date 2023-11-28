@@ -1,13 +1,5 @@
 #!/bin/bash
 
-# Katalog archiwum
-archive_dir=/home/arek/Desktop/obiad/archiwum
-
-# Sprawdź, czy istnieje katalog archiwum, jeśli nie, utwórz go
-if [ ! -d "$archive_dir" ]; then
-    mkdir "$archive_dir"
-fi
-
 # Znajdź pliki z rozszerzeniem .png i .jpg
 for file in *.png *.jpg; do
     if [ -f "$file" ]; then
@@ -22,22 +14,32 @@ for file in *.png *.jpg; do
             # Stwórz nową nazwę pliku z oryginalnym rozszerzeniem na końcu
             new_name="${now}.${extension}"
             
-            # Jeśli data w nazwie pliku nie jest dzisiejsza, przenieś do archiwum
-            if [ ! "$now" == "$(date +"%y%m%d" -d "@$(stat -c %Y "$file")")" ]; then
-                mv "$file" "$archive_dir/$file"
-                echo "Plik $file przeniesiony do archiwum."
-            else
-                mv "$file" "$new_name"
-                echo "Zmieniono nazwę pliku $file na: $new_name"
-            fi
+            mv "$file" "$new_name"
+            echo "Zmieniono nazwę pliku $file na: $new_name"
         else
             echo "Plik $file już zawiera datę w nazwie. Nie zmieniam nazwy."
         fi
     fi
 done
 
+# Zmienna do śledzenia czy znaleziono pliki do przeniesienia
+found_files=false
+
+# Przenieś pliki .png i .jpg, które nie mają dzisiejszej daty w nazwie, do folderu archiwum
+for file in *.png *.jpg; do
+    if [ -f "$file" ]; then
+        # Sprawdź, czy nazwa pliku nie zawiera dzisiejszej daty
+        if ! [[ "$file" == *"$now"* ]]; then
+            mv "$file" "$archiwum_folder/"
+            echo "Przeniesiono plik $file do folderu archiwum."
+            found_files=true
+        fi
+    fi
+done
+
+
 # Przejście do katalogu repozytorium Git
-cd /home/arek/Desktop/obiad
+cd ~/Desktop/obiad
 
 # Dodaj wszystkie zmiany
 git add .
