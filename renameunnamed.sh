@@ -29,7 +29,7 @@ cd ~/Desktop/obiad
 git add .
 
 # Utwórz commit z wiadomością
-git commit -m "Zmieniono nazwę pliku $file na: $new_name"
+git commit -m "Zmieniono nazwę na dzisiejszą datę"
 
 # Wypchnij zmiany na GitHub
 git push origin main

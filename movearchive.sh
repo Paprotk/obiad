@@ -22,3 +22,14 @@ for file in *.png *.jpg; do
     fi
 done
 
+# Przejście do katalogu repozytorium Git
+cd ~/Desktop/obiad
+
+# Dodaj wszystkie zmiany
+git add .
+
+# Utwórz commit z wiadomością
+git commit -m "Przeniesiono plik $file do folderu archiwum."
+
+# Wypchnij zmiany na GitHub
+git push origin main
