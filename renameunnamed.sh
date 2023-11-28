@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Katalog archiwum
-archive_dir=/home/arek/Desktop/obiad/archive
+archive_dir=/home/arek/Desktop/obiad/archiwum
 
 # Sprawdź, czy istnieje katalog archiwum, jeśli nie, utwórz go
 if [ ! -d "$archive_dir" ]; then
