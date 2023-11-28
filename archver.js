@@ -26,10 +26,10 @@ function moveFirstPNGToArchive() {
             return;
         }
 
-        const firstPNG = files.find(file => file.type === 'file' && file.name.toLowerCase().endsWith('.png'));
+        const firstPNG = files.find(file => file.type === 'file' && file.name.toLowerCase().endsWith('.jpg'));
 
         if (!firstPNG) {
-            alert('Brak plików PNG do przeniesienia.');
+            alert('Brak plików JPG do przeniesienia.');
             return;
         }
 
