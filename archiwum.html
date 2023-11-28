@@ -4,6 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Archiwum</title>
+  <style>
+    .image-container {
+      display: none;
+    }
+
+    .toggle-arrow {
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
   <h1>Archiwum</h1>
@@ -16,6 +25,23 @@
 
     const fileListElement = document.getElementById('fileList');
 
+    function toggleImage(event, imageUrl) {
+      const listItem = event.currentTarget.parentNode;
+      const imageContainer = listItem.querySelector('.image-container');
+
+      if (imageContainer.style.display === 'none') {
+        const image = document.createElement('img');
+        image.src = imageUrl;
+        image.alt = 'Image';
+
+        imageContainer.innerHTML = '';
+        imageContainer.appendChild(image);
+        imageContainer.style.display = 'block';
+      } else {
+        imageContainer.style.display = 'none';
+      }
+    }
+
     fetch(`https://api.github.com/repos/${username}/${repo}/contents/${folderPath}`)
       .then(response => response.json())
       .then(data => {
@@ -24,8 +50,18 @@
           fileLink.href = file.html_url;
           fileLink.textContent = file.name;
 
+          const toggleArrow = document.createElement('span');
+          toggleArrow.innerHTML = '&#x2193;'; // Down arrow character
+          toggleArrow.classList.add('toggle-arrow');
+          toggleArrow.addEventListener('click', (event) => toggleImage(event, file.download_url));
+
           const listItem = document.createElement('li');
           listItem.appendChild(fileLink);
+          listItem.appendChild(toggleArrow);
+
+          const imageContainer = document.createElement('div');
+          imageContainer.classList.add('image-container');
+          listItem.appendChild(imageContainer);
 
           fileListElement.appendChild(listItem);
         });
