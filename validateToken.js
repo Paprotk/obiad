@@ -8,7 +8,7 @@ function validateToken() {
     const token = tokenInput.value.trim();
 
     if (!token) {
-        alert('Wprowadź token dostępu GitHub.');
+        alert('Wprowadź poprawny token API.');
         return;
     }
 
