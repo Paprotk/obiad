@@ -27,7 +27,7 @@
                 .then(response => response.json())
                 .then(data => {
                     // Find the first file with .png or .jpg extension
-                    const imageFile = data.find(file => file.name.match(/\.(png|jpg)$/i));
+                    const imageFile = data.find(file => file.name.match(/\.(png|jpg|jpeg)$/i));
                     
                     if (imageFile) {
                         // Set the image source to the found file
