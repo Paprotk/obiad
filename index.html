@@ -1,45 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        p {text-align: center;}
+        p {
+            text-align: center;
+        }
+
         body {
             margin: 0;
             padding: 0;
         }
 
-        img {
+        .image-container {
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .image {
             width: 100%;
             height: auto;
-            display: block;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
             margin: 0 auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .loading-text,
+        .loaded-text {
+            text-align: center;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .loading-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .loaded-text {
+            opacity: 0;
         }
 
         .links-container {
             text-align: center;
-            margin-top: 20px;
+            position: absolute;
+            bottom: 25;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            margin-top: 10px;
         }
 
         .obiad-link {
-            text-decoration: none; /* Usuń podkreślenie */
-            color: black; /* Ustaw kolor tekstu */
-            cursor: pointer; /* Zmień kursor na wskazujący na link */
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
         }
 
         .obiad-link:hover {
-            text-decoration: underline; /* Dodaj podkreślenie po najechaniu kursorem */
+            text-decoration: underline;
         }
     </style>
     <title>Obiad</title>
 </head>
+
 <body>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             let clickCount = 0;
 
             const obiadLink = document.querySelector('.obiad-link');
+            const loadingText = document.querySelector('.loading-text');
+            const loadedText = document.querySelector('.loaded-text');
+            const imageContainer = document.querySelector('.image-container');
+            const obiadImage = document.querySelector('.image');
+            const linksContainer = document.querySelector('.links-container');
+
             obiadLink.addEventListener('click', function () {
                 clickCount++;
 
@@ -48,27 +92,34 @@
                 }
             });
 
-            // Get the list of files with .png or .jpg extension
             fetch('https://api.github.com/repos/paprotk/obiad/contents/')
                 .then(response => response.json())
                 .then(data => {
-                    // Find the first file with .png or .jpg extension
                     const imageFile = data.find(file => file.name.match(/\.(png|jpg|jpeg)$/i));
 
                     if (imageFile) {
-                        // Set the image source to the found file
-                        document.querySelector('img').src = imageFile.download_url;
-                        // Pokaż link po załadowaniu obrazka
-                        obiadLink.style.display = 'inline';
+                        obiadImage.style.backgroundImage = `url('${imageFile.download_url}')`;
+
+                        obiadImage.addEventListener('load', function () {
+                            loadingText.style.display = 'none';
+                            obiadImage.style.opacity = 1;
+                            loadedText.style.opacity = 1;
+                            linksContainer.style.opacity = 1; // Show links container
+                        });
                     }
                 })
                 .catch(error => console.error('Error fetching image:', error));
         });
     </script>
-    <img src="">
-    <div class="links-container">
+
+    <div class="loading-text">Proszę czekać, trwa ładowanie...</div>
+    <div class="image-container">
+        <div class="image"></div>
+    </div>
+    <div class="loaded-text links-container">
         <p class="obiad-link">obiadtk siempre vivo</p>
         <p><a href="archive.html">archiwum</a></p>
     </div>
 </body>
+
 </html>
